@@ -12,3 +12,6 @@ env/
 
 .DS_Store
 Thumbs.db
+
+# Local documentation (do not publish)
+DOCUMENTACION_LOCAL.md
