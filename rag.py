@@ -45,7 +45,6 @@ def create_vectorstore():
     return vectorstore
 
 _vectorstore = None
-
 #se crea una única vez para no tener que recalcular cada que se haga una pregunta
 def get_vectorstore():
     global _vectorstore
@@ -91,37 +90,37 @@ def step2(data):
     }
 runnable2 = RunnableLambda(step2)
 
-# el tercer runnable construye el prompt para la IA usando la pregunta y los documentos recuperados
+# el tercer runnable construye el prompt para la IA usanso la pregunta y los documentos recuperados
 def step3(data):
     print("\n Runnable 3: Construyendo prompt")
 
-    context = "\n\n".join([doc.page_content for doc in data["docs"]])
+    context = "\n\n".join([doc.page_content for doc in data["docs"]]) #aquí juntamos todos los documentos en uno solo
 
     prompt = f"""
-Responde la pregunta basándote en el contexto.
+        Responde la pregunta basándote en el contexto.
 
-Modo de respuesta: {data['modo']}
+        Modo de respuesta: {data['modo']}
 
-Contexto:
-{context}
+        Contexto:
+        {context}
 
-Pregunta: {data['question']}
-"""
+        Pregunta: {data['question']}
+    """
 
     return prompt
-#El tercer runnable
+
 runnable3 = RunnableLambda(step3)
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
-    temperature=0.2
+    temperature=0.2 #la temperatura para que sea más preciso
 )
 
 #el cuarto runnable genera la respuesta usando el prompt construido y el modelo de lenguaje
 def step4(prompt):
     print("\nRunnable 4: Generando respuesta con LLM")
 
-    response = llm.invoke(prompt)
+    response = llm.invoke(prompt) #se genera la respuests
 
     print("Respuesta generada (primeros 200 caracteres):")
     print(response.content[:200])
